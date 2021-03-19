@@ -1,7 +1,7 @@
 '''
 Module to make transformations on samples, such as shifting key or bpm to match song
 '''
-
+import numpy as np
 from music21 import key
 import librosa
 from librosa.effects import pitch_shift, time_stretch
@@ -66,3 +66,19 @@ def match_sample(sample, song_key, song_tempo, sample_rate=44100, mono=True):
         print('Stretch factor: ', stretch_factor)
     
     return time_stretch(current_sample, stretch_factor)
+
+
+def loop_sample(song_file, sample_file, sample_rate=44100, mono=True):
+    '''
+    Repeats the sample n times to match length of song
+    '''
+    current_song, sample_rate = librosa.load(song_file, sr=sample_rate, mono=mono)
+    current_sample, sample_rate = librosa.load(sample_file, sr=sample_rate, mono=mono)
+    repeat_times = int(round(len(current_song) / len(current_sample)))
+    print('Repeating ' + str(repeat_times) + ' times')
+    
+    looped_sample = np.array([])
+    for i in range(repeat_times):
+        looped_sample = np.append(looped_sample, current_sample)
+    
+    return looped_sample
