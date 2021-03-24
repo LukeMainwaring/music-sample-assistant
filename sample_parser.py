@@ -87,7 +87,7 @@ def create_music21_key(sample_key, is_minor=False):
         shifted_idx = 0 if curr_idx == len(NOTES) - 1 else curr_idx + 1 # if G# -> Ab, otherwise move up one note
         note = NOTES[shifted_idx]
         return key.Key(note + '-') if is_minor else key.Key(note.upper() + '-')
-    elif 'b' in sample_key[1:]: # Ignore note character since key of B would cause an issue
+    elif 'b' in sample_key[1:]: # Ignore first note character since key of B would cause an issue
         return key.Key(note + '-')
     else:
         return key.Key(note)

@@ -33,8 +33,7 @@ def get_candidate_sample_loops(sample_objects, original_tempo, original_key, req
                     candidate_samples.append(sample)
             else:
                 if not sample.key or sample.key in valid_key_range:
-                    # TODO: figure out if how we want to look for samples with no key. returns much more
-                    # Basically this could provide an option if you want beats/FX/risers included
+                    # Basically this could be provided as an option if you want beats/FX/risers included
                     candidate_samples.append(sample)
     
     # TODO: consider switching data type to set if list is too slow/large
