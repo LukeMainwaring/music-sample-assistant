@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
-      - .:/code
+      - .:/my_code
     environment:
       - FLASK_APP=app.py
       - FLASK_RUN_HOST=0.0.0.0

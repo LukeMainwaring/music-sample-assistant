@@ -2,3 +2,7 @@ flask
 pymysql
 sqlalchemy
 cryptography
+music21
+numpy
+librosa
+soundfile

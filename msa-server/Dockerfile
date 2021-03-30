@@ -1,7 +1,7 @@
 FROM python:3.8-slim-buster
 
 # Create app directory
-WORKDIR /code
+WORKDIR /my_code
 
 # Install python dependencies
 COPY requirements.txt requirements.txt
