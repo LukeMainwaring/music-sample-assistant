@@ -18,9 +18,8 @@ class Sample:
         # For one_shot, assume all loops contain bpm/tempo in filename
         # It seems like many filenames are labeled with "_one_shot_" or "_loop_",
         # so that's another possible strategy to enhance the accuracy
-        self.one_shot = False if self.tempo else True 
+        self.one_shot = False if self.tempo else True
 
-    # Other methods
     def get_sample_tempo(self, name):
         return parse_sample_bpm(name)
     
