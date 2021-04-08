@@ -2,6 +2,7 @@
 Creates a Sample object from just the filename
 '''
 import logging
+import json
 from sample_parser import parse_sample_bpm, parse_sample_key
 
 # LOGGER = logging.getLogger(__name__)
@@ -24,3 +25,9 @@ class Sample:
     
     def get_sample_key(self, name):
         return parse_sample_key(name)
+
+    # Custom to_json since Key object is not JSON serializable
+    def to_json(self):
+        sample_dict = self.__dict__
+        sample_dict['key'] = str(self.key)
+        return sample_dict
