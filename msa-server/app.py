@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, send_file
 app = Flask(__name__)
 
 import glob
@@ -24,12 +24,6 @@ def hello_world():
     return 'Hello, World!'
 
 
-# TODO: get all data
-@app.route('/api/allData')
-def get_all_data():
-    return 'getting all data'
-
-
 # TODO: slightly borrowed from notebook tests, delete after verifying
 @app.route('/api/testBpm')
 def test_bpm_parser():
@@ -44,7 +38,6 @@ def test_key_parser():
 @app.route('/api/getSpliceFiles')
 def get_splice_files():
     sample_objects = create_sample_objects()
-
     return json.dumps([sample.to_json() for sample in sample_objects])
 
 
@@ -68,6 +61,16 @@ def adjust_candidate_samples():
         print('--------------------------------------\n')
     
     return 'Done'
+
+# TODO: figure out how to send back multiple files once I have a UI to consume them
+@app.route('/api/downloadAudio')
+def download_wav_test():
+    try:
+        return send_file('/Users/lukemainwaring/ml/music-sample-assistant/msa-server/test_samples/KSHMR_Latin_GTR_Guitar_90_Am.wav',
+            attachment_filename='test_audio.wav', as_attachment=True)
+    except Exception as e:
+        return str(e)
+
 
 # Helper method to get all user's Splice files and convert to Sample objects
 def create_sample_objects(splice_files=[]):
@@ -95,3 +98,4 @@ def find_candidate_samples(original_key=None, original_tempo=120):
     sample_objects = create_sample_objects()
     candidate_samples = get_candidate_sample_loops(sample_objects, original_tempo, original_key)
     return candidate_samples
+
