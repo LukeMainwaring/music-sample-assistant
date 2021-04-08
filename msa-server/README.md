@@ -1,4 +1,5 @@
 Docker scripts to run:
+
 \$ docker-compose up
 
 If image needs to be rebuilt
@@ -12,6 +13,7 @@ This link was super helpful in getting started: https://docs.docker.com/compose/
 
 
 Local run:
+
 \$ export FLASK_APP=app.py
 
 \$ export FLASK_ENV=development
