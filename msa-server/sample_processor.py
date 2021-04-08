@@ -2,9 +2,7 @@
 Creates a Sample object from just the filename
 '''
 import logging
-# from sample_parser import parse_sample_bpm, parse_sample_key
-from my_code.sample_parser import parse_sample_bpm, parse_sample_key # TODO: figure out modules to make it like above
-
+from sample_parser import parse_sample_bpm, parse_sample_key
 
 # LOGGER = logging.getLogger(__name__)
 

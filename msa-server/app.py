@@ -3,10 +3,10 @@ import os
 from flask import Flask
 app = Flask(__name__)
 
-# TODO: figure out how to make modules not require full imports, i.e. from my_code.sample_parser -> from sample_parser
-from my_code.sample_parser import parse_sample_bpm
-import my_code.sample_processor
-import my_code.sample_transform
+from sample_parser import parse_sample_bpm
+import sample_processor
+import sample_transform
+
 
 # Routes
 @app.route('/')
