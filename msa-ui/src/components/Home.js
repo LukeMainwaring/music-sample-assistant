@@ -7,12 +7,14 @@ import {
   Select,
   MenuItem,
   Grid,
+  Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { VALID_SONG_KEYS } from '../util/constants';
+import { testDownloadAudio } from '../actions/samples';
 
-const Home = ({}) => {
+const Home = ({ testDownloadAudio }) => {
   const classes = useStyles();
 
   const [tempo, setTempo] = useState('120');
@@ -28,7 +30,7 @@ const Home = ({}) => {
 
   return (
     <div>
-      <Grid container className={classes.root} spacing={2}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant='h2' component='h2' align='center'>
             Welcome to Music Sample Assistant
@@ -78,9 +80,23 @@ const Home = ({}) => {
             </Grid>
           </Grid>
         </Grid>
+        <Grid item xs={12}>
+          <Grid container justify='center'>
+            <Grid item>
+              <Button variant='contained' onClick={() => testDownloadAudio()}>
+                Get Sample Test
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
       </Grid>
 
-      <Typography variant='h4' component='h4' align='center'>
+      <Typography
+        variant='h4'
+        component='h4'
+        align='center'
+        style={{ marginTop: 50 }}
+      >
         (eventually) upload current song section
       </Typography>
     </div>
@@ -99,7 +115,7 @@ const mapStateToProps = ({}) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({ testDownloadAudio }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
