@@ -14,7 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import { VALID_SONG_KEYS } from '../util/constants';
 import { testDownloadAudio } from '../actions/samples';
 
-const Home = ({ testDownloadAudio }) => {
+const Home = ({ testDownloadAudio, wavFile }) => {
   const classes = useStyles();
 
   const [tempo, setTempo] = useState('120');
@@ -86,6 +86,9 @@ const Home = ({ testDownloadAudio }) => {
               <Button variant='contained' onClick={() => testDownloadAudio()}>
                 Get Sample Test
               </Button>
+              {/* TODO: https://www.joshwcomeau.com/react/announcing-use-sound-react-hook/
+              figure out how to play wavFile from ui with wav data stored in redux */}
+              <div>{typeof wavFile}</div>
             </Grid>
           </Grid>
         </Grid>
@@ -110,8 +113,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const mapStateToProps = ({}) => {
-  return {};
+const mapStateToProps = ({ samples }) => {
+  return { wavFile: samples.wavFile };
 };
 
 const mapDispatchToProps = (dispatch) => {
