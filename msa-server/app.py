@@ -1,8 +1,7 @@
-import os
-
-from flask import Flask, send_file
+from flask import Flask, send_file, jsonify
 app = Flask(__name__)
 
+import base64
 import glob
 import os
 import json
@@ -65,11 +64,16 @@ def adjust_candidate_samples():
 # TODO: figure out how to send back multiple files once I have a UI to consume them
 @app.route('/api/downloadAudio')
 def download_wav_test():
-    try:
-        return send_file('/Users/lukemainwaring/ml/music-sample-assistant/msa-server/test_samples/KSHMR_Latin_GTR_Guitar_90_Am.wav',
-            attachment_filename='test_audio.wav', as_attachment=True)
-    except Exception as e:
-        return str(e)
+    test_file = '/Users/lukemainwaring/ml/music-sample-assistant/msa-server/test_samples/KSHMR_Latin_GTR_Guitar_90_Am.wav'
+
+    # Convert file to base64 before sending to UI
+    in_file = open(test_file, "rb")
+    data = in_file.read()
+    in_file.close()
+    encoded_data = base64.b64encode(data).decode('ascii')
+
+    response_data = { "sampleFileName": test_file, "audioData": encoded_data }
+    return jsonify(response_data)
 
 
 # Helper method to get all user's Splice files and convert to Sample objects
