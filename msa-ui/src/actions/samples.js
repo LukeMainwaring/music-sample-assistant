@@ -9,7 +9,10 @@ export const getTestBpm = () => async (dispatch) => {
 
 export const testDownloadAudio = () => async (dispatch) => {
   const response = await msaApi.get('/downloadAudio');
-  // TODO: figure out how to play this data/WAV file on UI
-  console.log(response);
-  dispatch({ type: TEST_DOWNLOAD_AUDIO, payload: response.data });
+
+  // Flask response format: { audioData: <base64 string> , sampleFileName: 'sample_name.wav' }
+  const audioData = response.data.audioData;
+  // const sampleFileName = response.data.sampleFileName; // Not needed yet
+
+  dispatch({ type: TEST_DOWNLOAD_AUDIO, payload: audioData });
 };

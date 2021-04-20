@@ -28,6 +28,14 @@ const Home = ({ testDownloadAudio, wavFile }) => {
     setSongKey(e.target.value);
   };
 
+  const renderAudio = () => {
+    return wavFile ? (
+      <audio controls src={`data:audio/x-wav;base64,${wavFile}`}></audio>
+    ) : (
+      ''
+    );
+  };
+
   return (
     <div>
       <Grid container spacing={2}>
@@ -86,9 +94,7 @@ const Home = ({ testDownloadAudio, wavFile }) => {
               <Button variant='contained' onClick={() => testDownloadAudio()}>
                 Get Sample Test
               </Button>
-              {/* TODO: https://www.joshwcomeau.com/react/announcing-use-sound-react-hook/
-              figure out how to play wavFile from ui with wav data stored in redux */}
-              <div>{typeof wavFile}</div>
+              {renderAudio()}
             </Grid>
           </Grid>
         </Grid>
