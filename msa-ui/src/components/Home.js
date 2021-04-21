@@ -98,7 +98,10 @@ const Home = ({ getCandidateSamples, candidateSamples }) => {
         <Grid item xs={12}>
           <Grid container justify='center'>
             <Grid item>
-              <Button variant='contained' onClick={() => getCandidateSamples()}>
+              <Button
+                variant='contained'
+                onClick={() => getCandidateSamples(songKey, tempo)}
+              >
                 Get Candidate Samples
               </Button>
               {renderAudio()}

@@ -7,11 +7,12 @@ import os
 import json
 import soundfile as sf
 import librosa
+from music21 import key
 
 from sample_parser import parse_sample_bpm, parse_sample_key
 from sample_processor import Sample
 from sample_transform import get_valid_key_range, get_candidate_sample_loops, match_sample
-from music21 import key
+from util import get_music21_key
 
 # TODO: remove after these test sample filenames are no longer needed
 disco_strings_file = 'test_samples/SC_DS_120_strings_stabs_swinging_upward_sting_Gmin.wav'
@@ -88,12 +89,12 @@ def download_wav_test():
 
     return jsonify(response_data)
 
-@app.route('/api/getCandidateSamplesMatched')
-def get_candidate_samples_matched():
-    # TODO: get these values from the UI. Hardcoded for now
-    original_key = key.Key('C')
-    original_tempo = 120
-    
+@app.route('/api/getCandidateSamplesMatched/<song_key>/<tempo>')
+def get_candidate_samples_matched(song_key, tempo):
+    music21_key = get_music21_key(song_key)
+    original_key = key.Key(music21_key)
+    original_tempo = int(tempo)
+
     candidate_samples = find_candidate_samples(original_key, original_tempo)
 
     temp_sample_files = []
@@ -139,10 +140,6 @@ def create_sample_objects(splice_files=[]):
 
 # Helper method to find candidate samples for current song
 def find_candidate_samples(original_key=None, original_tempo=120):
-    # Hardcoded for now
-    original_key = key.Key('C')
-    original_tempo = 120
-
     sample_objects = create_sample_objects()
     candidate_samples = get_candidate_sample_loops(sample_objects, original_tempo, original_key)
     return candidate_samples
