@@ -1,6 +1,7 @@
 import msaApi from '../apis/msaApi';
 
 export const TEST_DOWNLOAD_AUDIO = 'TEST_DOWNLOAD_AUDIO';
+export const GET_CANDIDATE_SAMPLES = 'GET_CANDIDATE_SAMPLES';
 
 export const getTestBpm = () => async (dispatch) => {
   const response = await msaApi.get('/testBpm');
@@ -12,7 +13,12 @@ export const testDownloadAudio = () => async (dispatch) => {
 
   // Flask response format: { audioData: <base64 string> , sampleFileName: 'sample_name.wav' }
   const audioData = response.data.audioData;
-  // const sampleFileName = response.data.sampleFileName; // Not needed yet
 
   dispatch({ type: TEST_DOWNLOAD_AUDIO, payload: audioData });
+};
+
+export const getCandidateSamples = () => async (dispatch) => {
+  const response = await msaApi.get('/getCandidateSamplesMatched');
+  // Flask response format: [ { audioData: <base64 string> , sampleFileName: 'sample_name.wav' }, ... ]
+  dispatch({ type: GET_CANDIDATE_SAMPLES, payload: response.data });
 };

@@ -12,9 +12,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { VALID_SONG_KEYS } from '../util/constants';
-import { testDownloadAudio } from '../actions/samples';
+import { getCandidateSamples } from '../actions/samples';
 
-const Home = ({ testDownloadAudio, wavFile }) => {
+const Home = ({ getCandidateSamples, candidateSamples }) => {
   const classes = useStyles();
 
   const [tempo, setTempo] = useState('120');
@@ -29,11 +29,18 @@ const Home = ({ testDownloadAudio, wavFile }) => {
   };
 
   const renderAudio = () => {
-    return wavFile ? (
-      <audio controls src={`data:audio/x-wav;base64,${wavFile}`}></audio>
-    ) : (
-      ''
-    );
+    if (candidateSamples && candidateSamples.length > 0) {
+      return candidateSamples.map((sample) => (
+        <div>
+          {sample.sampleFileName}
+          <audio
+            controls
+            src={`data:audio/x-wav;base64,${sample.audioData}`}
+          ></audio>
+        </div>
+      ));
+    }
+    return;
   };
 
   return (
@@ -91,8 +98,8 @@ const Home = ({ testDownloadAudio, wavFile }) => {
         <Grid item xs={12}>
           <Grid container justify='center'>
             <Grid item>
-              <Button variant='contained' onClick={() => testDownloadAudio()}>
-                Get Sample Test
+              <Button variant='contained' onClick={() => getCandidateSamples()}>
+                Get Candidate Samples
               </Button>
               {renderAudio()}
             </Grid>
@@ -120,11 +127,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const mapStateToProps = ({ samples }) => {
-  return { wavFile: samples.wavFile };
+  return { candidateSamples: samples.candidateSamples };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ testDownloadAudio }, dispatch);
+  return bindActionCreators({ getCandidateSamples }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

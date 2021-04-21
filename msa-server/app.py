@@ -1,4 +1,4 @@
-from flask import Flask, send_file, jsonify
+from flask import Flask, jsonify, after_this_request
 app = Flask(__name__)
 
 import base64
@@ -6,6 +6,7 @@ import glob
 import os
 import json
 import soundfile as sf
+import librosa
 
 from sample_parser import parse_sample_bpm, parse_sample_key
 from sample_processor import Sample
@@ -16,6 +17,9 @@ from music21 import key
 disco_strings_file = 'test_samples/SC_DS_120_strings_stabs_swinging_upward_sting_Gmin.wav'
 kshmr_guitar_file = 'test_samples/KSHMR_Latin_GTR_Guitar_90_Am.wav'
 SPLICE_SAMPLES_PATH = '/Users/lukemainwaring/Splice/sounds/packs'
+TEMP_DIR = 'temp_samples/'
+SAMPLE_RATE = 44100
+
 
 # Routes
 @app.route('/')
@@ -50,13 +54,12 @@ def adjust_candidate_samples():
     # Hardcoded for now
     original_key = key.Key('C')
     original_tempo = 120
-    sample_rate = 44100
 
     candidate_samples = find_candidate_samples(original_key, original_tempo)
 
     for sample in candidate_samples:
         matched_sample = match_sample(sample, original_key, original_tempo)
-        sf.write('test_samples/candidate_samples_matched/' + sample.name, matched_sample, sample_rate)
+        sf.write('test_samples/candidate_samples_matched/' + sample.name, matched_sample, SAMPLE_RATE)
         print('--------------------------------------\n')
     
     return 'Done'
@@ -64,17 +67,58 @@ def adjust_candidate_samples():
 # TODO: figure out how to send back multiple files once I have a UI to consume them
 @app.route('/api/downloadAudio')
 def download_wav_test():
-    test_file = '/Users/lukemainwaring/ml/music-sample-assistant/msa-server/test_samples/KSHMR_Latin_GTR_Guitar_90_Am.wav'
-
+    kshmr_guitar_file = '/Users/lukemainwaring/ml/music-sample-assistant/msa-server/test_samples/KSHMR_Latin_GTR_Guitar_90_Am.wav'
+    sample_name = 'KSHMR_Latin_GTR_Guitar_90_Am.wav'
+    current_sample, sample_rate = librosa.load(kshmr_guitar_file, sr=SAMPLE_RATE, mono=True)
+    temp_sample_file = TEMP_DIR + sample_name
+    sf.write(temp_sample_file, current_sample, sample_rate)
+    
     # Convert file to base64 before sending to UI
-    in_file = open(test_file, "rb")
-    data = in_file.read()
-    in_file.close()
-    encoded_data = base64.b64encode(data).decode('ascii')
+    encoded_data = encode_to_base64(temp_sample_file)
 
-    response_data = { "sampleFileName": test_file, "audioData": encoded_data }
+    response_data = { "sampleFileName": sample_name, "audioData": encoded_data }
+    
+    @after_this_request
+    def remove_file(response):
+        try:
+            os.remove(temp_sample_file)
+        except Exception as error:
+            app.logger.error("Error removing or closing downloaded file handle", error)
+        return response
+
     return jsonify(response_data)
 
+@app.route('/api/getCandidateSamplesMatched')
+def get_candidate_samples_matched():
+    # TODO: get these values from the UI. Hardcoded for now
+    original_key = key.Key('C')
+    original_tempo = 120
+    
+    candidate_samples = find_candidate_samples(original_key, original_tempo)
+
+    temp_sample_files = []
+    response_data = []
+
+    for sample in candidate_samples:
+        temp_sample_file = TEMP_DIR + sample.name
+        temp_sample_files.append(temp_sample_file)
+        matched_sample = match_sample(sample, original_key, original_tempo)
+        sf.write(temp_sample_file, matched_sample, SAMPLE_RATE)
+        
+        encoded_data = encode_to_base64(temp_sample_file)
+        sample_reponse = { "sampleFileName": sample.name, "audioData": encoded_data }
+        response_data.append(sample_reponse)        
+
+    @after_this_request
+    def remove_file(response):
+        for temp_sample_file in temp_sample_files:
+            try:
+                os.remove(temp_sample_file)
+            except Exception as error:
+                app.logger.error("Error removing or closing downloaded file handle", error)
+        return response
+    
+    return jsonify(response_data)
 
 # Helper method to get all user's Splice files and convert to Sample objects
 def create_sample_objects(splice_files=[]):
@@ -103,3 +147,8 @@ def find_candidate_samples(original_key=None, original_tempo=120):
     candidate_samples = get_candidate_sample_loops(sample_objects, original_tempo, original_key)
     return candidate_samples
 
+def encode_to_base64(sample_file):
+    in_file = open(sample_file, "rb")
+    data = in_file.read()
+    in_file.close()
+    return base64.b64encode(data).decode('ascii')
