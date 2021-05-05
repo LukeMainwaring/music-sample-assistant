@@ -1,6 +1,7 @@
 '''
-Module to parse sample files in order to obtain attributes like BPM and Key
+This module parses sample files in order to obtain attributes like BPM and Key.
 '''
+
 import re
 from music21 import key
 import logging
@@ -27,8 +28,15 @@ ALL_MINOR_KEYS = [note + identifier for note in NOTES for identifier in MINOR_KE
 
 def parse_sample_bpm(sample_file):
     '''
-    :param sample_file: Filename of sample
-    :return: int
+    Get BPM of sample from filename if exists, otherwise designate as a one-shot.
+    
+    Parameters:
+        sample_file (str):
+            Filename of sample.
+    
+    Returns:
+        int:
+            integer BPM of sample file, or None if one-shot.
     '''
     valid_bpms = [int(x) for x in re.findall(r'\d+', sample_file) if int(x) <= 200 and int(x) >= 50]
     
@@ -45,8 +53,15 @@ def parse_sample_bpm(sample_file):
 
 def parse_sample_key(sample_file):
     '''
-    :param sample_file: Filename of sample
-    :return: music21 Key object
+    Get key of sample from filename if exists.
+
+    Parameters:
+        sample_file (str):
+            Filename of sample.
+
+    Returns:
+        music21.Key:
+            music21 Key object, or None.
     '''
     sample_file = sample_file.lower()
     key = None
@@ -73,9 +88,17 @@ def parse_sample_key(sample_file):
 
 def create_music21_key(sample_key, is_minor=False):
     '''
-    :param sample_key: string key identifier grabbed from sample
-    :param is_minor: Whether or not the key is minor
-    :return: music21 Key object
+    Create music21 key from string value of key.
+
+    Parameters:
+        sample_key (str):
+            Key identifier in sample.
+        is_minor (boolean):
+            Whether or not the key is minor
+
+    Returns:
+        music21.Key:
+            music21 Key object.
     '''
     # 1. Grab first letter. In music21, lowercase note is minor and uppercase is major
     note = sample_key[0] if is_minor else sample_key[0].upper()

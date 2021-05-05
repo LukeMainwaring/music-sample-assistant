@@ -1,5 +1,5 @@
 '''
-Module to make transformations on samples, such as shifting key or bpm to match song
+This module makes transformations on samples, such as shifting key or bpm to match song
 '''
 import numpy as np
 from music21 import key
@@ -9,19 +9,38 @@ from librosa.effects import pitch_shift, time_stretch
 
 def get_valid_key_range(original_key, steps_range=2):
     '''
-    :param music21 key object: Target key
-    :return: set of music21 key objects
+    Generate set keys within a range of the song key.
+    
+    Parameters:
+        original_key (music21.Key):
+            music21 key object of song.
+        steps_range (Optional[int]):
+            How many keys above and below to include in result.
+    
+    Returns:
+        Set:
+            music21 Key objects
     '''
     return { original_key.transpose(steps) : steps for steps in range(-steps_range, steps_range + 1) }
 
 
 def get_candidate_sample_loops(sample_objects, original_tempo, original_key, require_key=True):
     '''
-    :param Sample object list: List of all custom Sample objects
-    :param int: Target tempo
-    :param music21 key object: Target key
-    :param boolean: If true, then we only include loops with key values
-    :return: list of music21 key objects
+    Filters sample loops to those within the key and tempo range.
+    
+    Parameters:
+        sample_objects (List[Sample]):
+            List of created Sample objects
+        original_tempo (int):
+            tempo of song
+        original_key (music21.Key):
+            music21 key object of song.
+        require_key (Optional[boolean]):
+            Whether or not we want those in valid key range
+    
+    Returns:
+        List[Sample]:
+            filtered Sample objects
     '''
     candidate_samples = []
     valid_key_range = get_valid_key_range(original_key)
@@ -39,10 +58,32 @@ def get_candidate_sample_loops(sample_objects, original_tempo, original_key, req
     # TODO: consider switching data type to set if list is too slow/large
     return candidate_samples
 
+
 # TODO: other get_candidate_sample_X types of calls, i.e. get_candidate_sample_one_shots or get_candidate_sample_<instrument>
 
 
 def match_sample(sample, song_key, song_tempo, sample_rate=44100, mono=True):
+    '''
+    Matches a sample to have the same key (transpose) and tempo (time stretch) as song.
+    
+    Parameters:
+        sample (Sample):
+            Sample object to match
+        song_key (music21.Key):
+            music21 key object of song.
+        song_tempo (int):
+            tempo of song.
+        sample_rate (Optional[int]):
+            Sample rate to use for processing.
+        mono (Optional[boolean]):
+            Process in 1 channel if True, 2 channels (stereo) if False
+    
+    Returns:
+        numpy.ndarray:
+            matched sample in librosa format
+    '''
+    
+    
     # TODO: figure out if sample should be transposed -> tempo matched, or tempo matched -> transposed
     
     # This could maybe be 2 separate functions, but need to analyze if it's best not to
@@ -69,7 +110,21 @@ def match_sample(sample, song_key, song_tempo, sample_rate=44100, mono=True):
 
 def loop_sample(song_file, sample_file, sample_rate=44100, mono=True):
     '''
-    Repeats the sample n times to match length of song
+    Repeats the sample n times to match length of song.
+    
+    Parameters:
+        song_file (str):
+            Path to wav file of song
+        song_file (str):
+            Path to wav file of sample to match length
+        sample_rate (Optional[int]):
+            Sample rate to use for processing.
+        mono (Optional[boolean]):
+            Process in 1 channel if True, 2 channels (stereo) if False
+    
+    Returns:
+        numpy.ndarray:
+            matched sample in librosa format
     '''
     current_song, sample_rate = librosa.load(song_file, sr=sample_rate, mono=mono)
     current_sample, sample_rate = librosa.load(sample_file, sr=sample_rate, mono=mono)
