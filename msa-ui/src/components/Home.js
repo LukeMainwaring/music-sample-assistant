@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Waveform from './Waveform';
 import { VALID_SONG_KEYS } from '../util/constants';
 import { getCandidateSamples } from '../actions/samples';
 
@@ -118,6 +119,7 @@ const Home = ({ getCandidateSamples, candidateSamples }) => {
       >
         (eventually) upload current song section
       </Typography>
+      <Waveform />
     </div>
   );
 };
