@@ -34,10 +34,10 @@ const Home = ({ getCandidateSamples, candidateSamples }) => {
       return candidateSamples.map((sample) => (
         <div>
           {sample.sampleFileName}
-          <audio
-            controls
-            src={`data:audio/x-wav;base64,${sample.audioData}`}
-          ></audio>
+          <Waveform
+            sampleName={sample.sampleFileName}
+            audioData={sample.audioData}
+          />
         </div>
       ));
     }
@@ -119,7 +119,6 @@ const Home = ({ getCandidateSamples, candidateSamples }) => {
       >
         (eventually) upload current song section
       </Typography>
-      <Waveform />
     </div>
   );
 };

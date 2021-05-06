@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import WaveSurfer from 'wavesurfer.js';
+import { Pause, PlayArrow } from '@material-ui/icons';
+
+import { IconButton } from '@material-ui/core';
 
 import styles from './Waveform.module.css';
 
@@ -9,8 +12,8 @@ class Waveform extends Component {
   };
 
   componentDidMount() {
-    const track = document.querySelector('#track');
-
+    const sampleIdentifier = this.props.sampleName.replace(/[^a-zA-Z ]/g, '');
+    const track = document.querySelector(`#${sampleIdentifier}`);
     this.waveform = WaveSurfer.create({
       barWidth: 3,
       cursorWidth: 1,
@@ -32,16 +35,19 @@ class Waveform extends Component {
   };
 
   render() {
-    // TODO: replace this with your own audio
-    const url = 'https://www.mfiles.co.uk/mp3-downloads/gs-cd-track2.mp3';
+    const { sampleName, audioData } = this.props;
+    const sampleIdentifier = sampleName.replace(/[^a-zA-Z ]/g, '');
 
     return (
       <div className={styles.WaveformContainer}>
-        <div className={styles.PlayButton} onClick={this.handlePlay}>
-          {!this.state.playing ? 'Play' : 'Pause'}
-        </div>
+        <IconButton className={styles.PlayButton} onClick={this.handlePlay}>
+          {!this.state.playing ? <PlayArrow /> : <Pause />}
+        </IconButton>
         <div id='waveform' className={styles.Wave} />
-        <audio id='track' src={url} />
+        <audio
+          id={sampleIdentifier}
+          src={`data:audio/x-wav;base64,${audioData}`}
+        />
       </div>
     );
   }
