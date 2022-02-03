@@ -1,6 +1,6 @@
 import logging
 import json
-from sample_parser import parse_sample_bpm, parse_sample_key
+from app.sample_parser import parse_sample_bpm, parse_sample_key
 
 # LOGGER = logging.getLogger(__name__)
 
