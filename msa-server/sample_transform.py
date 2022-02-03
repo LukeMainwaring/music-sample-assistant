@@ -115,7 +115,7 @@ def loop_sample(song_file, sample_file, sample_rate=44100, mono=True):
     Parameters:
         song_file (str):
             Path to wav file of song
-        song_file (str):
+        sample_file (str):
             Path to wav file of sample to match length
         sample_rate (Optional[int]):
             Sample rate to use for processing.
@@ -136,3 +136,8 @@ def loop_sample(song_file, sample_file, sample_rate=44100, mono=True):
         looped_sample = np.append(looped_sample, current_sample)
     
     return looped_sample
+
+
+
+
+

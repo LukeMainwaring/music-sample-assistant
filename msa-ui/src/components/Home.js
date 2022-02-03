@@ -32,13 +32,15 @@ const Home = ({ getCandidateSamples, candidateSamples }) => {
   const renderAudio = () => {
     if (candidateSamples && candidateSamples.length > 0) {
       return candidateSamples.map((sample) => (
-        <div>
+        // <div>
+        <Grid item>
           {sample.sampleFileName}
           <Waveform
             sampleName={sample.sampleFileName}
             audioData={sample.audioData}
           />
-        </div>
+          {/* // </div> */}
+        </Grid>
       ));
     }
     return;
