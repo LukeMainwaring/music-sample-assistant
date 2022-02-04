@@ -14,18 +14,15 @@ from app.sample_processor import Sample
 from app.sample_transform import get_valid_key_range, get_candidate_sample_loops, match_sample
 from app.util import get_music21_key
 
-# TODO: remove after these test sample filenames are no longer needed
-disco_strings_file = 'test_samples/SC_DS_120_strings_stabs_swinging_upward_sting_Gmin.wav'
 kshmr_guitar_file = 'test_samples/KSHMR_Latin_GTR_Guitar_90_Am.wav'
 SPLICE_SAMPLES_PATH = '/Users/lukemainwaring/Splice/sounds/packs'
-TEMP_DIR = 'temp_samples/'
+TEMP_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "temp_samples")
 SAMPLE_RATE = 44100
-
 
 
 def create_app():
     app = Flask(__name__)
-    
+
     @app.route('/api/getSpliceFiles')
     def get_splice_files():
         sample_objects = create_sample_objects()
@@ -38,7 +35,7 @@ def create_app():
 
     @app.route('/api/adjustCandidateSamples')
     def adjust_candidate_samples():
-        # Hardcoded for now
+        # Hardcoded for now 
         original_key = key.Key('C')
         original_tempo = 120
 
@@ -88,6 +85,7 @@ def create_app():
 
         for sample in candidate_samples:
             temp_sample_file = TEMP_DIR + sample.name
+            temp_sample_file = os.path.join(TEMP_DIR, sample.name)
             temp_sample_files.append(temp_sample_file)
             matched_sample = match_sample(sample, original_key, original_tempo)
             sf.write(temp_sample_file, matched_sample, SAMPLE_RATE)

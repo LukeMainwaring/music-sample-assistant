@@ -2,5 +2,9 @@
 
 Welcome to Music Sample Assistant
 
-To run locally
-\$ npm start
+To run locally:
+```bash
+npm start
+```
+
+Go to localhost:3000
