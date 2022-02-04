@@ -1,21 +1,20 @@
 Docker scripts to run:
 
-\$ docker-compose up
-
-If image needs to be rebuilt
-\$ docker-compose up --build
+```bash
+docker-compose up
+docker-compose up --build # If image needs to be rebuilt
+```
 
 To stop:
-Ctrl + c,
-\$ docker-compose down
-
-This link was super helpful in getting started: https://docs.docker.com/compose/gettingstarted/
-
+```bash
+Ctrl + c
+docker-compose down
+```
 
 Local run:
 
-\$ export FLASK_APP=app.py
-
-\$ export FLASK_ENV=development
-
-\$ flask run
+```bash
+export FLASK_APP=app
+export FLASK_ENV=development
+flask run
+```

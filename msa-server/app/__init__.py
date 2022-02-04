@@ -26,27 +26,10 @@ SAMPLE_RATE = 44100
 def create_app():
     app = Flask(__name__)
     
-    # Routes
-    @app.route('/')
-    def hello_world():
-        return 'Hello, World!'
-    
-    # TODO: slightly borrowed from notebook tests, delete after verifying
-    @app.route('/api/testBpm')
-    def test_bpm_parser():
-        sample_bpm = parse_sample_bpm(disco_strings_file)
-        return str(sample_bpm)
-
-    @app.route('/api/testKey')
-    def test_key_parser():
-        sample_key = parse_sample_key(kshmr_guitar_file)
-        return str(sample_key)
-
     @app.route('/api/getSpliceFiles')
     def get_splice_files():
         sample_objects = create_sample_objects()
         return json.dumps([sample.to_json() for sample in sample_objects])
-
 
     @app.route('/api/getCandidateSamples')
     def get_candidate_samples():
