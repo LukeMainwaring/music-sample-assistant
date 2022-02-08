@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, after_this_request
 
-import base64
 import glob
 import os
 import json
@@ -12,7 +11,7 @@ from music21 import key
 from app.sample_parser import parse_sample_bpm, parse_sample_key
 from app.sample_processor import Sample
 from app.sample_transform import get_valid_key_range, get_candidate_sample_loops, match_sample
-from app.util import get_music21_key
+from app.util import get_music21_key, encode_to_base64
 
 kshmr_guitar_file = 'test_samples/KSHMR_Latin_GTR_Guitar_90_Am.wav'
 SPLICE_SAMPLES_PATH = '/Users/lukemainwaring/Splice/sounds/packs'
@@ -127,11 +126,5 @@ def create_app():
         sample_objects = create_sample_objects()
         candidate_samples = get_candidate_sample_loops(sample_objects, original_tempo, original_key)
         return candidate_samples
-
-    def encode_to_base64(sample_file):
-        in_file = open(sample_file, "rb")
-        data = in_file.read()
-        in_file.close()
-        return base64.b64encode(data).decode('ascii')
     
     return app

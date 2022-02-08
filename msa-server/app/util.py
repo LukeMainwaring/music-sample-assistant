@@ -1,5 +1,6 @@
+import base64
 
-# TODO: expand upon these once key selection is nailed down in UI
+# TODO: add more keys once key selection is nailed down in UI
 MUSIC21_KEY_MAPPINGS = {
     'A major' : 'A',
     'B major' : 'B',
@@ -25,3 +26,21 @@ def get_music21_key(key_value):
             String identifier to create proper music21 key.
     '''
     return MUSIC21_KEY_MAPPINGS[key_value]
+
+
+def encode_to_base64(sample_file):
+    '''
+    Encode .wav file to base64 format
+    
+    Parameters:
+        sample_file (str):
+            Filename of wav file
+    
+    Returns:
+        str:
+            binary format of wav file
+    '''
+    in_file = open(sample_file, "rb")
+    data = in_file.read()
+    in_file.close()
+    return base64.b64encode(data).decode('ascii')
