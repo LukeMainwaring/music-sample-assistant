@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msa-ui-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msa-ui
+  template:
+    metadata:
+      labels:
+        app: msa-ui
+    spec:
+      containers:
+        - name: msa-ui
+          image: lukemain/msa-ui
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: msa-ui-srv
+spec:
+  selector:
+    app: msa-ui
+  ports:
+    - name: msa-ui
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

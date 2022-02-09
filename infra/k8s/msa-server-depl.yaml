@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msa-server-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msa-server
+  template:
+    metadata:
+      labels:
+        app: msa-server
+    spec:
+      containers:
+        - name: msa-server
+          image: lukemain/msa-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: msa-server-srv
+spec:
+  selector:
+    app: msa-server
+  ports:
+    - name: msa-server
+      protocol: TCP
+      port: 5000
+      targetPort: 5000

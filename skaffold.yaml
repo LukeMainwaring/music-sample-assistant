@@ -1,0 +1,26 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: lukemain/msa-ui
+      context: msa-ui
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.js'
+            dest: .
+    - image: lukemain/msa-server
+      context: msa-server
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.py'
+            dest: .
