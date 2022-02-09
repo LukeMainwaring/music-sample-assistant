@@ -9,6 +9,7 @@ import styles from './Waveform.module.css';
 class Waveform extends Component {
   state = {
     playing: false,
+    duration: null,
   };
 
   componentDidMount() {
@@ -19,7 +20,7 @@ class Waveform extends Component {
       cursorWidth: 1,
       container: '#waveform',
       backend: 'WebAudio',
-      height: 80,
+      height: 100,
       progressColor: '#2D5BFF',
       responsive: true,
       waveColor: '#EFEFEF',
@@ -27,6 +28,7 @@ class Waveform extends Component {
     });
 
     this.waveform.load(track);
+    // this.setState({ duration: this.waveform.getDuration() }); // TODO: show time duration for sample
   }
 
   handlePlay = () => {
@@ -43,11 +45,13 @@ class Waveform extends Component {
         <IconButton className={styles.PlayButton} onClick={this.handlePlay}>
           {!this.state.playing ? <PlayArrow /> : <Pause />}
         </IconButton>
-        <div id='waveform' className={styles.Wave} />
-        <audio
-          id={sampleIdentifier}
-          src={`data:audio/x-wav;base64,${audioData}`}
-        />
+        <div className={styles.Wave}>
+          <div id='waveform' />
+          <audio
+            id={sampleIdentifier}
+            src={`data:audio/x-wav;base64,${audioData}`}
+          />
+        </div>
       </div>
     );
   }

@@ -83,7 +83,6 @@ def create_app():
         response_data = []
 
         for sample in candidate_samples:
-            temp_sample_file = TEMP_DIR + sample.name
             temp_sample_file = os.path.join(TEMP_DIR, sample.name)
             temp_sample_files.append(temp_sample_file)
             matched_sample = match_sample(sample, original_key, original_tempo)

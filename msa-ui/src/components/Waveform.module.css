@@ -10,19 +10,11 @@
 
 .Wave {
     width: 100%;
-    height: 90px;
+    height: 100px;
 }
 
 .PlayButton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 60px;
     height: 60px;
     background: #efefef;
-    border-radius: 50%;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding-bottom: 3px;
 }

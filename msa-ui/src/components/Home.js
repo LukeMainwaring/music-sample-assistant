@@ -1,143 +1,100 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
   Typography,
-  InputLabel,
-  Select,
-  MenuItem,
   Grid,
-  Button,
+  Container,
+  AppBar,
+  IconButton,
+  Toolbar,
+  CssBaseline,
 } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Waveform from './Waveform';
-import { VALID_SONG_KEYS } from '../util/constants';
-import { getCandidateSamples } from '../actions/samples';
+import Samples from './Samples';
+import SampleFilterBox from './SampleFilterBox';
 
-const Home = ({ getCandidateSamples, candidateSamples }) => {
+const Home = () => {
   const classes = useStyles();
 
-  const [tempo, setTempo] = useState('120');
-  const [songKey, setSongKey] = useState('C major');
-
-  const handleTempoChange = (e) => {
-    setTempo(e.target.value);
-  };
-
-  const handleSongKeyChange = (e) => {
-    setSongKey(e.target.value);
-  };
-
-  const renderAudio = () => {
-    if (candidateSamples && candidateSamples.length > 0) {
-      return candidateSamples.map((sample) => (
-        // <div>
-        <Grid item>
-          {sample.sampleFileName}
-          <Waveform
-            sampleName={sample.sampleFileName}
-            audioData={sample.audioData}
-          />
-          {/* // </div> */}
-        </Grid>
-      ));
-    }
-    return;
-  };
-
   return (
-    <div>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant='h2' component='h2' align='center'>
-            Welcome to Music Sample Assistant
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position='absolute'>
+        <Toolbar>
+          <IconButton
+            edge='start'
+            className={classes.menuButton}
+            color='inherit'
+            aria-label='menu'
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            component='h1'
+            variant='h4'
+            color='inherit'
+            noWrap
+            className={classes.title}
+          >
+            Music Sample Assistant
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container justify='center'>
-            <Grid item>
-              <Typography variant='h5' component='h5'>
-                Select Tempo
-              </Typography>
+        </Toolbar>
+      </AppBar>
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth='lg' className={classes.container}>
+          <Grid container spacing={4}>
+            <Grid item xs={6}>
+              <SampleFilterBox />
             </Grid>
-            <Grid item className={classes.bpmInput}>
-              <TextField
-                required
-                id='standard-required'
-                label='Input Tempo'
-                name='tempo'
-                value={tempo}
-                onChange={handleTempoChange}
-              />
+            <Grid item xs={12}>
+              <Samples />
             </Grid>
+            <Typography
+              variant='h4'
+              component='h4'
+              align='center'
+              style={{ marginTop: 50 }}
+            >
+              Upload current song section
+            </Typography>
           </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container justify='center'>
-            <Grid item>
-              <Typography variant='h5' component='h5'>
-                Select Key
-              </Typography>
-            </Grid>
-            <Grid item className={classes.bpmInput}>
-              <InputLabel id='demo-simple-select-label'>Song Key</InputLabel>
-              <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                name='songKey'
-                value={songKey}
-                onChange={handleSongKeyChange}
-              >
-                {VALID_SONG_KEYS.map((songKey, index) => (
-                  <MenuItem key={index} value={songKey}>
-                    {songKey}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container justify='center'>
-            <Grid item>
-              <Button
-                variant='contained'
-                onClick={() => getCandidateSamples(songKey, tempo)}
-              >
-                Get Candidate Samples
-              </Button>
-              {renderAudio()}
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Typography
-        variant='h4'
-        component='h4'
-        align='center'
-        style={{ marginTop: 50 }}
-      >
-        (eventually) upload current song section
-      </Typography>
+        </Container>
+      </main>
     </div>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
-  bpmInput: {
-    marginBottom: 20,
-    marginLeft: 20,
+  appBarSpacer: theme.mixins.toolbar,
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  content: {
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto',
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  root: {
+    display: 'flex',
+  },
+  title: {
+    flexGrow: 1,
   },
 }));
 
-const mapStateToProps = ({ samples }) => {
-  return { candidateSamples: samples.candidateSamples };
+const mapStateToProps = () => {
+  return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ getCandidateSamples }, dispatch);
+  return bindActionCreators({}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

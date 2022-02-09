@@ -1,7 +1,9 @@
 import msaApi from '../apis/msaApi';
 
 export const TEST_DOWNLOAD_AUDIO = 'TEST_DOWNLOAD_AUDIO';
-export const GET_CANDIDATE_SAMPLES = 'GET_CANDIDATE_SAMPLES';
+export const GET_CANDIDATE_SAMPLES_LOADING = 'GET_CANDIDATE_SAMPLES_LOADING';
+export const GET_CANDIDATE_SAMPLES_FINISH = 'GET_CANDIDATE_SAMPLES_FINISH';
+export const GET_CANDIDATE_SAMPLES_ERROR = 'GET_CANDIDATE_SAMPLES_ERROR';
 
 export const getTestBpm = () => async (dispatch) => {
   const response = await msaApi.get('/testBpm');
@@ -15,9 +17,14 @@ export const testDownloadAudio = () => async (dispatch) => {
 };
 
 export const getCandidateSamples = (songKey, tempo) => async (dispatch) => {
-  const response = await msaApi.get(
-    `/getCandidateSamplesMatched/${songKey}/${tempo}`
-  );
-  // Flask response format: [ { audioData: <base64 string> , sampleFileName: 'sample_name.wav' }, ... ]
-  dispatch({ type: GET_CANDIDATE_SAMPLES, payload: response.data });
+  try {
+    dispatch({ type: GET_CANDIDATE_SAMPLES_LOADING });
+    const response = await msaApi.get(
+      `/getCandidateSamplesMatched/${songKey}/${tempo}`
+    );
+    // Flask response format: [ { audioData: <base64 string> , sampleFileName: 'sample_name.wav' }, ... ]
+    dispatch({ type: GET_CANDIDATE_SAMPLES_FINISH, payload: response.data });
+  } catch (err) {
+    dispatch({ type: GET_CANDIDATE_SAMPLES_ERROR, error: err });
+  }
 };
