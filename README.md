@@ -7,4 +7,6 @@ Clearly, there are certain sounds that work well in the mix, and it’d be helpf
 This project aims to assist with sample selection by using a neural network trained on samples that sound well together. For now, it's designed to be used in a web-app format (msa-ui and msa-server).
 
 
-![Screen Shot 2022-02-08 at 5 16 54 PM](https://user-images.githubusercontent.com/13542329/153097721-08fce1d7-e0ea-4063-870b-c98c0341c4f7.png)
+
+
+![Screen Shot 2022-02-08 at 5 19 33 PM](https://user-images.githubusercontent.com/13542329/153097936-66a31c41-cdd9-47df-9ab6-d171b0c7aaf6.png)
