@@ -24,3 +24,11 @@ build:
         manual:
           - src: 'app/*.py'
             dest: .
+    - image: lukemain/ml-models
+      context: ml-models
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'inference/*.py'
+            dest: .

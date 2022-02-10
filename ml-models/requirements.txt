@@ -1,0 +1,4 @@
+flask
+tensorflow==2.7.0
+numpy==1.20.1
+kapre==0.3.7

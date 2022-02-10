@@ -1,0 +1,19 @@
+FROM python:3.8.2-slim-buster
+
+# Create app directory
+WORKDIR /my_code
+
+# Install python dependencies
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+# Needed to get soundfile python lib running on Linux
+RUN apt-get update && apt-get install -y libsndfile1
+
+# Container is listening on port 5050
+EXPOSE 5050
+
+# Bundle app source
+COPY . .
+
+CMD ["flask", "run"]
