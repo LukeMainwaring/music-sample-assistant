@@ -97,7 +97,7 @@ def match_sample(sample, song_key, song_tempo, sample_rate=44100, mono=True):
         transpose_steps = -1 * valid_key_range[sample.key] # Direct the transposition towards the song key
         print('Transpose steps: ', transpose_steps)
     current_sample, sample_rate = librosa.load(sample.full_path, sr=sample_rate, mono=mono)    
-    current_sample = pitch_shift(current_sample, sample_rate, n_steps=transpose_steps)
+    current_sample = pitch_shift(current_sample, sr=sample_rate, n_steps=transpose_steps)
     
     # Match Tempo if applicable
     stretch_factor = 1
@@ -105,7 +105,7 @@ def match_sample(sample, song_key, song_tempo, sample_rate=44100, mono=True):
         stretch_factor = song_tempo / sample.tempo
         print('Stretch factor: ', stretch_factor)
     
-    return time_stretch(current_sample, stretch_factor)
+    return time_stretch(current_sample, rate=stretch_factor)
 
 
 def loop_sample(song_file, sample_file, sample_rate=44100, mono=True):
